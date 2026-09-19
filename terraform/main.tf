@@ -456,7 +456,7 @@ resource "aws_ecs_service" "platform" {
 
 resource "aws_appautoscaling_target" "ecs" {
   max_capacity       = var.max_task_count
-  min_capacity       = 1
+  min_capacity       = 0
   resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.platform.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
