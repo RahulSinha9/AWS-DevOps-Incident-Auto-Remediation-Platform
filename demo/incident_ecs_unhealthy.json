@@ -1,0 +1,14 @@
+{
+  "incident_id": "INC-2026-001",
+  "service": "checkout",
+  "source": "ecs",
+  "symptom": "ECS checkout service unhealthy",
+  "evidence": {
+    "alb_5xx_rate": "18.7%",
+    "target_health": "unhealthy",
+    "unhealthy_targets": 3,
+    "deployment_revision": "checkout:v1.8.2",
+    "previous_revision": "checkout:v1.8.1",
+    "cpu": 62
+  }
+}
