@@ -580,6 +580,107 @@ GitHub permissions are kept minimal with:
 
 ---
 
+
+# 16. Complete AWS infrastructure with Terraform
+
+The repository now includes a **full Terraform lab infrastructure** for the incident platform.
+
+Terraform provisions:
+
+- VPC
+- Two Availability Zones
+- Public subnets
+- Internet Gateway
+- ECR repository with image scanning
+- ECS Fargate cluster
+- ECS task definition and service
+- Application Load Balancer
+- ECS and ALB security groups
+- CloudWatch log group
+- ECS CPU alarm
+- ALB 5xx alarm
+- EventBridge alarm-state rule
+- SQS incident queue
+- SQS dead-letter queue
+- SNS notification topic
+- DynamoDB incident/audit table
+- Secrets Manager secret placeholder
+- IAM execution role
+- IAM application/remediation role
+- ECS CPU target-tracking autoscaling
+- Optional PostgreSQL RDS database
+
+### Infrastructure flow
+
+```text
+                    AWS
+                     |
+          +----------+----------+
+          |                     |
+      Application           Monitoring
+          |                     |
+       ECS Fargate          CloudWatch
+          |                     |
+          ALB              Alarm State
+                                |
+                           EventBridge
+                                |
+                               SQS
+                                |
+                       Incident Platform
+                                |
+                       Analysis + Policy
+                                |
+                    +-----------+-----------+
+                    |                       |
+              Safe remediation       Human approval
+```
+
+### Important bootstrap behavior
+
+Terraform defaults to:
+
+`desired_count = 0`
+
+This is intentional. The ECR repository must exist before the project Docker image can be pushed.
+
+After building and pushing the application image, set:
+
+```hcl
+container_image = "<YOUR_ECR_REPOSITORY_URL>:v1"
+desired_count   = 1
+```
+
+Then run:
+
+```bash
+terraform apply
+```
+
+Detailed Terraform instructions are available in:
+
+`terraform/README.md`
+
+### AWS cost warning
+
+This creates real AWS resources. ECS Fargate, the Application Load Balancer, RDS and CloudWatch can generate charges.
+
+For the initial learning environment:
+
+- RDS is disabled by default.
+- NAT Gateway is not used.
+- ECS starts with zero tasks.
+- DynamoDB uses on-demand billing.
+
+When finished with the lab:
+
+```bash
+terraform destroy
+```
+
+**Do not run `terraform apply` in a production account without reviewing the networking, IAM, secrets, TLS, logging, and remediation permissions first.**
+
+
 # 17. Production architecture roadmap
 
 The current repository is the foundation. The next implementation stages can add real AWS automation.
