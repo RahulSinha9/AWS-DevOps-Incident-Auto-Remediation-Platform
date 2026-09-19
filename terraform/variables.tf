@@ -49,7 +49,7 @@ variable "container_memory" {
 variable "desired_count" {
   description = "Initial ECS task count."
   type        = number
-  default     = 1
+  default     = 0
 }
 
 variable "max_task_count" {
