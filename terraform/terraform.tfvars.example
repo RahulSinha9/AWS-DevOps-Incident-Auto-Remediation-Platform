@@ -6,7 +6,7 @@ environment  = "dev"
 # replace this with the ECR image URI.
 container_image = "public.ecr.aws/docker/library/nginx:alpine"
 
-desired_count  = 1
+desired_count  = 0
 max_task_count = 4
 
 # RDS costs money. Keep false until you need the database scenario.
