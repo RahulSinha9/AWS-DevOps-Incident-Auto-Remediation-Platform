@@ -1,0 +1,9 @@
+services:
+  incident-platform:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      AWS_REGION: ap-south-1
+      DRY_RUN: "true"
+      MAX_SCALE_TASKS: "10"
